@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Skygear IoT Tutorial</title>
+  <script src="https://code.skygear.io/js/skygear/latest/skygear.min.js"></script>
+</head>
+<body>
+  <form id="config" action="javascript:config()">
+    <fieldset id="inputs" style="display:inline">
+      <legend>Skygear Config</legend>
+      <input type="text" placeholder="End Point">
+      <input type="text" placeholder="API Key">
+      <input type="submit" value="Config">
+    </fieldset>
+    <fieldset id="actions" style="display:inline" disabled>
+      <legend>Skygear Actions</legend>
+      <button type="button" onclick="publish('ping')">
+        Send ping
+      </button>
+      <button type="button" onclick="publish('request-temperature')">
+        Send request-temperature
+      </button>
+    </fieldset>
+  </form>
+  <fieldset id="log" style="display:inline" disabled>
+    <legend>Event Log</legend>
+    <textarea id="log-text" cols="130" rows="30"></textarea>
+  </fieldset>
+  <script>
+document.getElementById('log-text').value = '';
+function config() {
+  console.log('config');
+  document
+    .getElementById('inputs')
+    .setAttribute('disabled','');
+  var form = document.getElementById('config');
+  skygear.config({
+    endPoint: form[1].value,
+    apiKey: form[2].value
+  }).then(function() {
+    return skygear.signupAnonymously()
+  }).then(function() {
+    document
+      .getElementById('inputs')
+      .removeAttribute('disabled');
+    document
+      .getElementById('actions')
+      .removeAttribute('disabled');
+    document
+      .getElementById('log')
+      .removeAttribute('disabled');
+    skygear.on('ping', function(data) {
+      appendLog('ping', data);
+    });
+    skygear.on('pong', function(data) {
+      appendLog('pong', data);
+    });
+    skygear.on('request-temperature', function(data) {
+      appendLog('request-temperature', data);
+    });
+    skygear.on('high-temperature', function(data) {
+      appendLog('high-temperature', data);
+    });
+  });
+}
+function publish(event) {
+  console.log(event);
+  skygear.pubsub.publish(event, {});
+}
+function appendLog(event, data) {
+  var message = '['+new Date().toUTCString()+'] '+event+': '+JSON.stringify(data)+'\n';
+  console.log(message);
+  document
+    .getElementById('log-text')
+    .value += message;
+}
+  </script>
+</body>
+</html>
