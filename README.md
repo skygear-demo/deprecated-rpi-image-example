@@ -50,7 +50,7 @@ async function main() {
 module.exports = main();
 ```
 
-Your file structure would now look something like this:
+Your file structure should now look something like this:
 
 ```
 /home/pi/skygear-iot
