@@ -40,7 +40,7 @@ async function main() {
     // randomly generate a temperature between 30-80
     // because we don't have a physical sensor connected
     const temperature = 30 + 50 * Math.random();
-    skygear.publicDB.save(
+    await skygear.publicDB.save(
       new TemperatureRecord({temperature})
     );
     console.log(`Temperature Sent: ${temperature}C`);
@@ -107,7 +107,7 @@ def request_temperature():
   publish('request-temperature', {})
 
 @skygear.after_save('temperature')
-def check_temperature(record):
+def check_temperature(record, *_):
   if record['temperature'] > 70:
     publish('high-temperature', {
       'device':       record['created_by'],

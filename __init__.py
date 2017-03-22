@@ -6,9 +6,9 @@ def request_temperature():
     publish('request-temperature', {})
 
 @skygear.after_save('temperature')
-def check_temperature(record):
+def check_temperature(record, *_):
     if record['temperature'] > 70:
         publish('high-temperature', {
-            'device':       record['created_by'],
+            'device':       record.created_by,
             'temperature':  record['temperature']})
 

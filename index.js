@@ -10,7 +10,7 @@ async function main() {
     // randomly generate a temperature between 30-80
     // because we don't have a physical sensor connected
     const temperature = 30 + 50 * Math.random();
-    skygear.publicDB.save(
+    await skygear.publicDB.save(
       new TemperatureRecord({temperature})
     );
     console.log(`Temperature Sent: ${temperature}C`);
