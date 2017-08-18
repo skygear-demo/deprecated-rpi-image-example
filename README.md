@@ -1,3 +1,7 @@
+# DEPRECATED
+
+The Skygear IoT plugins only works with Skygear v0, but not in latest v1.
+
 # Create your first Skygear IoT application
 
 In this tutorial, we will create a system with 3 parts:
